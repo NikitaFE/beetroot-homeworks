@@ -29,7 +29,7 @@
 
     const fillTheList = (names) => {
       const dataToRender = names.sort() // отсортировали по алфавиту
-                                .map(item =>  item = `<li class="list-group-item">${item}</li>`) // Преобразовали в массив вида [ "<li class="list-group-item">Tom</li>", ....]
+                                .map(item => item = `<li class="list-group-item">${item}</li>`) // Преобразовали в массив вида [ "<li class="list-group-item">Tom</li>", ....]
                                 .reduce((a, i) => a + i); // Слепили в одну строку для отрисовки
       list.insertAdjacentHTML('beforeend', dataToRender); // Отрисовали
     };
