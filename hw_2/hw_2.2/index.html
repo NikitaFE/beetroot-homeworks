@@ -13,13 +13,7 @@
        *   Например  sum(3)(1) -> 4  , sum(7)(-1) -> 6
        * */
 
-       const sum = (a) => {
-        const first = a;
-
-        return (b) => {
-          return first + b;
-        }
-       };
+       const sum = a => b => a + b;
 
        console.log(sum(3)(1));
        console.log(sum(7)(-1));
