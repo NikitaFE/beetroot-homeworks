@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+ <head>
+    <title>JavaScript - regSearch.html</title>
+    <meta charset="utf-8">
+</head>
+<body>
+
+<script>  
+  /* 
+  Код работает, но не защищен - клментский код может удалить элементы массива  из-вне
+  Исправить этот недостатьк 
+  */
+
+  function getUsers() {
+    const users = ["Bill"];
+    return {
+      addUser: function(name) {
+        users.push(name);
+        return users.slice();
+      },
+      getUsers: function() {
+        return users.slice();
+      }
+    };
+  }
+
+  const u = getUsers();
+  u.addUser("Jim");
+  u.addUser("Paul");
+  console.log(u.getUsers()); // выведется [ 'Bill', 'Jim', 'Paul' ]
+
+  u.getUsers().pop(); // удаляем 2-й элемент массива
+  console.log(u.getUsers()); //  ['Bill', 'Jim']
+</script>
+  
+</body>
+</html>
