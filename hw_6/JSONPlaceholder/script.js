@@ -29,10 +29,9 @@ const renderPosts = data => {
   return allPosts;
 };
 
-const renderUserInfo = (user, userId) => {
+const renderUserInfo = (user) => {
   const [{name, username, email}] = user;
   const userInfo = document.createElement('ul');
-  userInfo.id = `user${userId}`;
 
   userInfo.innerHTML = `<li>${name}</li><li>${username}</li><li><a href="mailto:${email}">${email}</a></li>`;
 
@@ -43,21 +42,17 @@ const onUserLinkClick = (e) => {
   e.preventDefault();
   const {target} = e;
   const userId = target.dataset.id;
-  let infoBlock = document.querySelector(`user${userId}`);
-  console.log(infoBlock);
-  //  Вот тут шалость не удалась
-  if(!infoBlock) {
-    const parentPost = target.parentNode;
-    const userTail = `${usersTail}?id=${userId}`;
-    const userData = getData(URL, userTail);
-    
-    userData
-      .then(res => res.json())
-      .then(user => renderUserInfo(user, userId))
-      .then(userInfo => parentPost.appendChild(userInfo));
-  } else {
-    infoBlock.remove();
-  }
+  const parentPost = target.parentNode;
+  const userTail = `${usersTail}?id=${userId}`;
+  const userData = getData(URL, userTail);
+  
+  userData
+    .then(res => res.json())
+    .then(user => renderUserInfo(user))
+    .then(userInfo => parentPost.appendChild(userInfo))
+    .then(() => target.remove());
+
+  target.removeEventListener('click', onUserLinkClick);
 }
 
 const fillUserInfo = userLink => {
@@ -73,8 +68,10 @@ const fillList = () => {
     .then(allPosts => output.innerHTML = allPosts)
     .then(() => {
       const usersLinks = document.querySelectorAll('li > a');
-      
       usersLinks.forEach(link => fillUserInfo(link));
+    })
+    .finally(() => {
+      spinner.remove();
     })
 };
 
