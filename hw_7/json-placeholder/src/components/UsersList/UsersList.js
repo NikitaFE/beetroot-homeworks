@@ -6,10 +6,10 @@ import User from '../User';
 
 const UsersList = ({ users }) => {
   return (
-    <ul>
+    <ul className="d-flex flex-wrap">
       {
         users.map(({id, ...userInfo}) => (
-          <li key={id}>
+          <li className="col-4" key={id}>
             <User {...userInfo} />
           </li>
         ))

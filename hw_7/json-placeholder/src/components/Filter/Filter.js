@@ -38,7 +38,7 @@ export default class Filter extends Component {
     const { buttons } = this.state; 
     return (
       <div className="d-flex justify-content-center m-3">
-        <h2 className="mr-3">Filter</h2>
+        <h2 className="mr-3">Sorting</h2>
         <div className="btn-group">
           {buttons.map(({id, text, active}) => (
             <button

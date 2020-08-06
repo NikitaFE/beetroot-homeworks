@@ -4,10 +4,12 @@ import './App.css';
 
 import Filter from '../Filter';
 import UsersList from '../UsersList';
+import Search from '../Search';
 
 export default class App extends Component {
   state = {
     users: [],
+    unfilteredData: [],
     sort_by: ''
   }
 
@@ -20,7 +22,10 @@ export default class App extends Component {
     const usersData = await response.json();
     const newData = await usersData.map(({id, name, username, email}) => ({id, name, username, email}));
 
-    this.setState({users: newData});
+    this.setState({
+      users: newData,
+      unfilteredData: newData
+    });
   }
 
   compare(a, b) {
@@ -47,12 +52,26 @@ export default class App extends Component {
       users.sort((a, b) => this.compare(a[sort_by], b[sort_by]));
     }
   }
+
+  searchUsers = (searchTarget) => {
+    const { users } = this.state;
+    this.setState({
+      users: users.filter(user => user.name.toLowerCase().includes(searchTarget.toLowerCase()))
+    });
+  }
+
+  refreshSearch = () => {
+    this.setState({
+      users: this.state.unfilteredData
+    })
+  }
   
   render() {
     this.sortUsers();
 
     return (
       <div className="app container">
+        <Search searchUsers={this.searchUsers} refreshSearch={this.refreshSearch} />
         <Filter changeSortBy={this.changeSortBy} />
         <UsersList users={this.state.users} />
       </div>
