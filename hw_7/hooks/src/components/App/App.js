@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './App.css';
 
@@ -6,31 +6,27 @@ import Filter from '../Filter';
 import UsersList from '../UsersList';
 import Search from '../Search';
 
-export default class App extends Component {
-  URL = 'https://jsonplaceholder.typicode.com/users';
+function App() {
+  const URL = 'https://jsonplaceholder.typicode.com/users';
 
-  state = {
-    users: [],
-    unfilteredData: [],
-    sort_by: ''
-  }
+  const [users, setUsers] = useState([]);
+  const [unfilteredData, setUnfilteredData] = useState([]);
+  const [sortBy, setSortBy] = useState('');
 
-  componentDidMount() {
-    this.getUsers();
-  }
+  useEffect(() => {
+    getUsers();
+  }, []);
 
-  getUsers = async () => {
-    const response = await fetch(this.URL);
+  const getUsers = async () => {
+    const response = await fetch(URL);
     const usersData = await response.json();
     const newData = await usersData.map(({id, name, username, email}) => ({id, name, username, email}));
 
-    this.setState({
-      users: newData,
-      unfilteredData: newData
-    });
+      setUsers(newData);
+      setUnfilteredData(newData);
   }
 
-  compare(a, b) {
+  const compare = (a, b) => {
     let comparison = 0;
 
     if (a > b) {
@@ -41,42 +37,35 @@ export default class App extends Component {
     return comparison;
   }
 
-  changeSortBy = (sortTarget) => {
-    this.setState({
-      sort_by: sortTarget
-    })
+  const changeSortBy = (sortTarget) => {
+    setSortBy(sortTarget);
   }
   
-  sortUsers = () => {
-    const { users, sort_by } = this.state;
-    
-    if(sort_by) {
-      users.sort((a, b) => this.compare(a[sort_by], b[sort_by]));
+  const sortUsers = () => {
+    if(sortBy.length > 0) {
+      users.sort((a, b) => compare(a[sortBy], b[sortBy]));
     }
   }
 
-  searchUsers = (searchTarget) => {
-    const { users } = this.state;
-    this.setState({
-      users: users.filter(user => user.name.toLowerCase().includes(searchTarget.toLowerCase()))
-    });
+  const searchUsers = (searchTarget) => {
+    const filteredUsers = users.filter(user => user.name.toLowerCase().includes(searchTarget.toLowerCase()));
+    
+    setUsers(filteredUsers);
   }
 
-  refreshSearch = () => {
-    this.setState({
-      users: this.state.unfilteredData
-    })
+  const refreshSearch = () => {
+    setUsers(unfilteredData);
   }
   
-  render() {
-    this.sortUsers();
+  sortUsers();
 
-    return (
-      <div className="app container">
-        <Search searchUsers={this.searchUsers} refreshSearch={this.refreshSearch} />
-        <Filter changeSortBy={this.changeSortBy} />
-        <UsersList users={this.state.users} />
-      </div>
-    );
-  }
+  return (
+    <div className="app container">
+      <Search searchUsers={searchUsers} refreshSearch={refreshSearch} />
+      <Filter changeSortBy={changeSortBy} />
+      <UsersList users={users} />
+    </div>
+  );
 }
+
+export default App;

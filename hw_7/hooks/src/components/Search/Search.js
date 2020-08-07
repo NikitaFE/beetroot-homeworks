@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './Search.css';
 
 function Search(props) {
@@ -39,6 +40,11 @@ function Search(props) {
       </form>
     </div>
   );
+}
+
+Search.propTypes = {
+  searchUsers: PropTypes.func,
+  refreshSearch: PropTypes.func
 }
 
 export default Search;

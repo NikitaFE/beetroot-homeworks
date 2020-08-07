@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './User.css';
 
 const User = ({ name, username, email }) => {
@@ -9,6 +11,12 @@ const User = ({ name, username, email }) => {
       <a href={`mailto${email}`}>{email}</a>
     </div>
   );
-}
+};
+
+User.propTypes = {
+  name: PropTypes.string,
+  username: PropTypes.string,
+  email: PropTypes.string
+};
 
 export default User;

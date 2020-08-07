@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './UsersList.css';
 
@@ -16,6 +17,10 @@ const UsersList = ({ users }) => {
       }
     </ul>
   );
-}
+};
+
+User.propTypes = {
+  users: PropTypes.array
+};
 
 export default UsersList;
