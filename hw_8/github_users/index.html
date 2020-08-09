@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Github users</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@16.8.3/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16.8.3/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    // const data = [
+    //   {id: 1, name: 'Dan Abramov', login: 'gaearon',  avatar_url: 'https://avatars0.githubusercontent.com/u/810438?v=4'},
+    //   {id: 2, name: 'Sophie Alpert', login: 'sophiebits', avatar_url: 'https://avatars2.githubusercontent.com/u/6820?v=4'},
+    //   {id: 3, name: 'Brian Vaughn', login: 'bvaughn', avatar_url: 'https://avatars2.githubusercontent.com/u/199471?v=4'}
+    // ];
+
+    class CardErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { 
+          error: this.props.error,
+          errorInfo: ''
+        };
+      }
+
+      // Вот эта штука не работает
+      componentDidCatch(error, errorInfo) {
+        console.log(error, errorInfo);
+      }
+
+      render() {
+        if (this.state.error) {
+          return (
+            <div className="cart">
+              <h3>Oops...</h3>
+              <p>Something is wrong</p>
+              <img src="https://placehold.it/75" />
+            </div>
+          )
+        }
+
+        return this.props.children;
+      }
+    }
+
+    class Form extends React.Component {
+      state = {
+        value: ''
+      };
+
+      handleSubmit = event => {
+        event.preventDefault();
+
+        this.props.addUsers(this.state.value);
+        this.setState({ value: '' });
+      }
+
+      update = event => this.setState({ value: event.target.value });
+
+      render() {
+        return (
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-box">
+              <div className="form-box__item">
+                <input
+                  type="text"
+                  value={this.state.value}
+                  onChange={this.update}  
+                />
+                <button>Add user</button>
+              </div>
+            </div>
+          </form>
+        )
+      }
+    }
+
+    const Cart = ({profile, error}) => (
+      <CardErrorBoundary error={error}>
+        <div className="cart">
+          <h3>{profile.name}</h3>
+          <p>{profile.login}</p>
+          <img src={profile.avatar_url} />
+        </div>
+      </CardErrorBoundary>
+    );
+
+    const CartList = ({ data, error }) => (
+      <div className="cart-box">
+        {data.map(profile =>(
+          <Cart key={profile.id} profile={profile} error={error} />
+        ))} 
+      </div>
+    );
+
+    class App extends React.Component {
+      state = {
+        data: [],
+        error: false
+      };
+
+      addUsers = async val => {
+          const url = `https://api.github.com/users/${val}`;
+        try {
+          const result = await fetch(url);
+
+          if (!result.ok) {
+            this.setState({ error: true });
+          }
+
+          const user = await result.json();
+          
+          this.setState({ data: [...this.state.data, user] });
+          this.setState({ error: false });
+        } catch (error) {
+          this.setState({ error: true });
+        }
+      }
+
+      render() {
+        return (
+          <div className="container">
+            <Form addUsers={this.addUsers}/>
+            <CartList data={this.state.data} error={this.state.error} />
+          </div>
+        )
+      }
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</body>
+
+</html>
