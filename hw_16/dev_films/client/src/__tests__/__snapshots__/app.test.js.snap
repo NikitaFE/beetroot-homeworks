@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should make snapshot 1`] = `
+<div
+  class="ui container"
+>
+  <div
+    class="ui secondary pointing menu"
+  >
+    <a
+      aria-current="page"
+      class="item active"
+      href="/"
+    >
+      Home
+    </a>
+    <a
+      class="item"
+      href="/films"
+    >
+      Films
+    </a>
+    <div
+      class="right menu"
+    >
+      <a
+        class="item"
+        href="/signup"
+      >
+        Sing up
+      </a>
+      <a
+        class="item"
+        href="/login"
+      >
+        Login
+      </a>
+    </div>
+  </div>
+  
+  <div
+    class="ui icon message"
+  >
+    <i
+      class="notched circle loading icon"
+    />
+    <div
+      class="content"
+    >
+      <div
+        class="header"
+      >
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+`;

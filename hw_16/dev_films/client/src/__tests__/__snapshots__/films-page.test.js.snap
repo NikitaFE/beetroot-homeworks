@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilmsPage /> should make snapshot 1`] = `
+<div
+  class="ui stackable grid"
+>
+  <div
+    class="ten wide column"
+  >
+    <div
+      class="ui four cards"
+    >
+      <div
+        class="ui icon olive message"
+      >
+        <i
+          class="icon star outline"
+        />
+        <div
+          class="content"
+        >
+          <div
+            class="header"
+          >
+            No films in out base yet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
